@@ -17,6 +17,10 @@ setup(
     # install_requires=['numpy==1.8.1'],  #  package dependencies
     # entry_points={'console_scripts': ['run = mypackage.module1:run']},  # useful if you want to run from terminal/console (functions made available as command-line tools)
     ### automatic versioning
-    use_scm_version=True,
+    use_scm_version={
+        'write_to': 'version.py',
+        'write_to_template': '__version__= "{version}"',
+        'tag_regex': r'^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$'
+    },
     setup_requires=['setuptools_scm']
 )
