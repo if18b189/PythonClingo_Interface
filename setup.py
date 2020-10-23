@@ -6,7 +6,9 @@ from setuptools import setup, find_packages
 setup(
     name='PythonClingo_Interface',
     version='1.0.0',
-    packages=find_packages(exclude=('tests*')),     #excluding tests since we do not want to distribute out tests
+    extras_require=dict(tests=['pytest']),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     url='https://github.com/BerkWerk/PythonClingo_Interface',
     license='',
     author='Oskar & Berk',
