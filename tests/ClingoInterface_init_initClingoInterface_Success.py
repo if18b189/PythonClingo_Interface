@@ -4,4 +4,5 @@ from pythonclingointerface import ClingoInterface
 
 
 def test_execute():
-    assert ClingoInterface("hello")
+    test=ClingoInterface("test")
+    assert test.execute()=="test"
