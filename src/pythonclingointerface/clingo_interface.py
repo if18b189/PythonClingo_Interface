@@ -29,12 +29,12 @@ class ClingoInterface:
             for i in x:
                 print(i.decode("utf-8"))  # decoding  b'1234' -> 1234
 
-
     """
         scanning all directories recursively for jupyter notebook files
         extracting the code between 2 markers/parenthesis (perenthesis_start & parenthesis_end)
         running the clingo code with run()
     """
+
     def check_jnotebook_parenthesis(self):
         parenthesis = False
         parenthesis_start = "<CLINGO"
@@ -45,7 +45,7 @@ class ClingoInterface:
         files = glob.glob(os.getcwd() + '/**/*.ipynb', recursive=True)  # searching all .ipynb recursively
 
         for file in files:
-            fs = open(file, 'r')  # file provides the filename, r stands for read
+            fs = open(file, 'r') # file provides the filename, r stands for read
             con = fs.read().splitlines()  # splitlines '\n' -> list
 
             for line in con:
@@ -54,7 +54,7 @@ class ClingoInterface:
                     parenthesis = False
 
                 if parenthesis:  # adds clingo code to to parenthesis_content
-                    parenthesis_content = parenthesis_content + line
+                    parenthesis_content += line[5:-2].replace("\\n", "\n").replace('\\"', '"')
 
                 if parenthesis_start in line:  # checks for start parenthesis
                     parenthesis = True
@@ -62,9 +62,8 @@ class ClingoInterface:
             # creating a temporary file for each notebook which contains clingo code
             fd, path = tempfile.mkstemp()
             with open(path, "w") as f:
-                f.write(parenthesis_content)
+                postString = parenthesis_content.split("\n", 1)[1]
+                f.write(postString)
 
             # running the clingo code in the temporary files
             ClingoInterface.run(self, path)
-
-
