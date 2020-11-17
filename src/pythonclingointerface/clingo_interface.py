@@ -15,3 +15,4 @@ class ClingoInterface:
     def run(self):
         subprocess.call('clingo ../../tests/clingoCodeExample')
 
+
