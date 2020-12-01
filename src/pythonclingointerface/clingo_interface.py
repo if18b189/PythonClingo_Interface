@@ -4,6 +4,7 @@ import tempfile
 import sys
 import glob
 
+"""Solution Format"""
 class ClingoSolutions:
     def __init__(self, clingoCode):
         if(type(clingoCode==bytes)):
@@ -25,6 +26,7 @@ class ClingoSolutions:
                 go = True
         self.text=self.text.decode("utf-8")
 
+"""Looking for Code"""
 class ClingoInterface:
     def __init__(self):
         self.solutions=[]
