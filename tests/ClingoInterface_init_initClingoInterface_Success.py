@@ -6,3 +6,9 @@ from pythonclingointerface import ClingoInterface
 def test_execute():
     test = ClingoInterface("test")
     assert test.execute() == "test"
+
+test=ClingoInterface()
+print(test.solutions)
+for i in test.solutions:
+    print(i.text)
+    print(i.solutions)

@@ -26,11 +26,20 @@ class ClingoSolutions:
                 go = True
         self.text=self.text.decode("utf-8")
 
+class ClingoProblem:
+    def __init__(self):
+        self.name:str
+        pass
+
+    def run(self):
+        pass
+
+
 """Looking for Code"""
 class ClingoInterface:
     def __init__(self):
         self.solutions=[]
-        ClingoInterface.check_jnotebook_parenthesis(self)
+        # ClingoInterface.check_jnotebook_parenthesis(self)
 
     def run(self, file_or_code):
         with tempfile.TemporaryFile() as tempf:  # reading into a temporary file prevents issues with bigger input values
@@ -74,11 +83,5 @@ class ClingoInterface:
             # running the clingo code in the temporary files
             ClingoInterface.run(self, path)
 
-
-test=ClingoInterface();
-print(test.solutions)
-for i in test.solutions:
-    print(i.text)
-    print(i.solutions)
 
 
