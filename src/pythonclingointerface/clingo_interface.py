@@ -56,16 +56,21 @@ class ClingoInterface:
             if d == foldername:
                 return newdir
 
-    def checkParenthesis(self, directoryName="PythonClingo_Interface"):
+    def checkParenthesis(self, directoryName="PythonClingo_Interface", py=True, txt=True, ipynb=True):
         parenthesis = False
         parenthesis_start = "<CLINGO"
         parenthesis_end = "CLINGO>"
         parenthesis_content = ""
         print('ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
-
+        files=[]
         try:
-            files = glob.glob(self.findDirectory(directoryName) + '**/*.ipynb',
-                              recursive=True)  # searching all .ipynb recursively
+            if(py):
+                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.ipynb', recursive=True))
+            if(txt):
+                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.txt', recursive=True))
+            if(ipynb):
+                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
+
             print("Found .ipynb Files: " + str(files))
         except:
             print("ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")

@@ -18,7 +18,7 @@ def main():
     #
     # print(findDirectory("PythonClingo_Interface"))
 
-    # ClingoInterface("text").run("clingoCodeExample")
+    # ClingoInterface("text").run("clingoCodeExample.txt")
 
 
 main()
