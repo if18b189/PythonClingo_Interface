@@ -1,3 +1,6 @@
+
+<CLINGO
+
 #script (python)
 
 import clingo
@@ -16,3 +19,5 @@ def main(prg):
 #end.
 
 2 { a; b; c; d }.
+
+CLINGO>
