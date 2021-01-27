@@ -103,6 +103,19 @@ class ClingoInterface:
         returns: C:\\Users\\USER\\test\\
     """
 
+    def printSolutions(self):
+        print(self.solutions)
+        for i in self.solutions:
+            print(i.text)
+            print(i.solutions)
+
+    def run(self, pathList_or_code):
+        if type(pathList_or_code) is list:
+            for path in pathList_or_code:
+                self.executeClingoCode(path)
+        else:
+            self.executeClingoCode(pathList_or_code)
+
     def findDirectory(self, foldername):
         sep = os.sep
         dirs = os.path.abspath("").split("\\")
