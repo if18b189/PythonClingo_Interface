@@ -11,6 +11,7 @@ def main():
     test.run(path)
     test.printSolutions()
 
+
     # path = os.path.abspath("")
     #
     # print("absolute: " + path)
