@@ -20,10 +20,17 @@ class ClingoSolution:
         self.text = self.text.decode("utf-8")
 
 class ClingoProblem:
-    def __init__(self,tmpFile=None):
+    def __init__(self,tmpFile=None,autoexecute=True,clingoString=None):
         self.solution:ClingoSolution
         self.path=tmpFile
-        self.executeClingoCode()
+        if(autoexecute):
+            self.executeClingoCode()
+            if(clingoString and tmpFile==None):
+                fd, tmpFile = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
+                with os.fdopen(fd, "w") as tmp:
+                    tmp.write(clingoString)
+                self.executeClingoCode()
+                os.remove(tmpFile)
 
     def executeClingoCode(self):
         if self.path is not None:
@@ -83,3 +90,4 @@ class ClingoInterface:
                     clingoCodeContent = parenthesis_content.split("\n", 1)[1]
                     tmp.write(clingoCodeContent)
                 self.problems.append(ClingoProblem(temporaryFilePath))
+                os.remove(temporaryFilePath)
