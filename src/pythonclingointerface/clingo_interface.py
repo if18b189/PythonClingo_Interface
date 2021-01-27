@@ -20,9 +20,12 @@ class ClingoSolution:
         self.text = self.text.decode("utf-8")
 
 class ClingoProblem:
-    def __init__(self,tmpFile=None,autoexecute=True,clingoString=None):
+    def __init__(self,tmpFile=None,autoexecute=True,clingoString=None,name="Problem Name"):
         self.solution:ClingoSolution
+        self.name=name
         self.path=tmpFile
+        self.problemCode=clingoString
+
         if(autoexecute):
             self.executeClingoCode()
             if(clingoString and tmpFile==None):
@@ -45,13 +48,12 @@ class ClingoProblem:
 class ClingoInterface:
     def __init__(self):
         self.problems = []
-        self.checkParenthesis()
 
     def printSolutions(self):
-        print(self.solutions)
-        for i in self.solutions:
-            print(i.text)
-            print(i.solutions)
+        print(self.problems)
+        for i in self.problems:
+            print(i.name)
+            print(i.solution.solutions)
 
     def run(self, pathList_or_code):
         if type(pathList_or_code) is list:
@@ -78,11 +80,11 @@ class ClingoInterface:
         files=[]
         try:
             if(py):
-                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.ipynb', recursive=True))
+                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
             if(txt):
                 files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.txt', recursive=True))
             if(ipynb):
-                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
+                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.ipynb', recursive=True))
 
             print("Found .ipynb Files: " + str(files))
         except:
@@ -105,6 +107,7 @@ class ClingoInterface:
                         parenthesis = True
                 fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
                 with os.fdopen(fd, "w") as tmp:
+                    print(parenthesis_content)
                     clingoCodeContent = parenthesis_content.split("\n", 1)[1]
                     tmp.write(clingoCodeContent)
                 self.problems.append(ClingoProblem(temporaryFilePath))
