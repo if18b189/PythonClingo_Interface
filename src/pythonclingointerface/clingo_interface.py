@@ -3,11 +3,12 @@ import os
 import tempfile
 import glob
 
+
 class ClingoSolution:
-    def __init__(self,p_text):
-        self.solutions=[]
-        self.text=p_text
-        self.go=False
+    def __init__(self, p_text):
+        self.solutions = []
+        self.text = p_text
+        self.go = False
         lines = self.text.splitlines()
         for line in lines:
             if self.go:
@@ -19,16 +20,17 @@ class ClingoSolution:
                 self.go = True
         self.text = self.text.decode("utf-8")
 
-class ClingoProblem:
-    def __init__(self,tmpFile=None,autoexecute=True,clingoString=None,name="Problem Name"):
-        self.solution:ClingoSolution
-        self.name=name
-        self.path=tmpFile
-        self.problemCode=clingoString
 
-        if(autoexecute):
+class ClingoProblem:
+    def __init__(self, tmpFile=None, autoexecute=True, clingoString=None, name="Problem Name"):
+        self.solution: ClingoSolution
+        self.name = name
+        self.path = tmpFile
+        self.problemCode = clingoString
+
+        if (autoexecute):
             self.executeClingoCode()
-            if(clingoString and tmpFile==None):
+            if (clingoString and tmpFile == None):
                 fd, tmpFile = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
                 with os.fdopen(fd, "w") as tmp:
                     tmp.write(clingoString)
@@ -41,9 +43,10 @@ class ClingoProblem:
                 proc = subprocess.Popen('clingo ' + self.path, shell=True, stdout=tempf)
                 proc.wait()
                 tempf.seek(0)
-                self.solution=ClingoSolution(tempf.read())
+                self.solution = ClingoSolution(tempf.read())
         else:
             print("ClingoInterface:Run(): there is no file to run")
+
 
 class ClingoInterface:
     def __init__(self):
@@ -76,19 +79,21 @@ class ClingoInterface:
         parenthesis_start = "<CLINGO"
         parenthesis_end = "CLINGO>"
         parenthesis_content = ""
-        print('ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
-        files=[]
+        print(
+            'ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
+        files = []
         try:
-            if(py):
+            if (py):
                 files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
-            if(txt):
+            if (txt):
                 files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.txt', recursive=True))
-            if(ipynb):
+            if (ipynb):
                 files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.ipynb', recursive=True))
 
             print("Found .ipynb Files: " + str(files))
         except:
-            print("ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
+            print(
+                "ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
             raise
 
         for file in files:
@@ -105,10 +110,15 @@ class ClingoInterface:
                         parenthesis_content += line[5:-2].replace("\\n", "\n").replace('\\"', '"')
                     if parenthesis_start in line:  # checks for start parenthesis
                         parenthesis = True
-                fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
+                fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(),
+                                                         text=True)
                 with os.fdopen(fd, "w") as tmp:
                     print(parenthesis_content)
-                    clingoCodeContent = parenthesis_content.split("\n", 1)[1]
+                    clingoCodeContent = parenthesis_content.split("\n", 1)
+                    if len(clingoCodeContent) > 1:
+                        clingoCodeContent = clingoCodeContent[1]
+                    else:
+                        return
                     tmp.write(clingoCodeContent)
                 self.problems.append(ClingoProblem(temporaryFilePath))
                 os.remove(temporaryFilePath)
