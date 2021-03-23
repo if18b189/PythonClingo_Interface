@@ -76,7 +76,7 @@ To get a local copy up and running follow these simple example steps.
 
 
 
-### Setup & Installation
+### Installation
 
 Tested with Python `3.8.8` other versions may or may not work.
 ```
