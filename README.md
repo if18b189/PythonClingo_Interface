@@ -1,5 +1,3 @@
-#   PythonClingo Interface
-
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -10,31 +8,42 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 <!-- shields.io -->
-![GitHub contributors](https://img.shields.io/github/contributors/BerkWerk/PythonClingo_Interface)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/BerkWerk/PythonClingo_Interface)
+![GitHub contributors](https://img.shields.io/github/contributors/if18b189/PythonClingo_Interface)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/if18b189/PythonClingo_Interface)
 <p align="center">
 
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
-  <h3 align="center">Best-README-Template</h3>
+[comment]: <> (  <a href="https://github.com/othneildrew/Best-README-Template">)
+
+[comment]: <> (    <img src="images/logo.png" alt="Logo" width="80" height="80">)
+
+[comment]: <> (  </a>)
+
+  <h1 align="center">PythonClingo Interface</h1>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    A fast introduction to Clingo!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+
+[comment]: <> (    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>)
+
+[comment]: <> (    <br />)
+
+[comment]: <> (    <br />)
+
+[comment]: <> (    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>)
+
+[comment]: <> (    ·)
+
+[comment]: <> (    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>)
+
+[comment]: <> (    ·)
+
+[comment]: <> (    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>)
   </p>
 </p>
 
@@ -47,8 +56,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
-* [Roadmap](#roadmap)
-* [License](#license)
+
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -69,13 +77,14 @@ in Python/JupyterNotebooks.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
-
-
+* Python and Jupyter Notebook
+* Clingo installation
+  * Anaconda ```conda install -c potassco clingo```
+  * or download & install [Clingo](https://potassco.org/clingo/) manually 
+    * (it may be necessary to add the extracted folder to your OS path / environment variables )
+  
 ### Installation
 
 Tested with Python `3.8.8` other versions may or may not work.
@@ -85,8 +94,6 @@ cd PythonClingo_Interface
 pip install -r requirements.txt
 ```
 
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 
@@ -94,16 +101,3 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
