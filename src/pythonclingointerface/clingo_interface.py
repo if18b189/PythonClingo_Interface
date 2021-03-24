@@ -79,9 +79,9 @@ class ClingoInterface:
         parenthesis_start = "<CLINGO"
         parenthesis_end = "CLINGO>"
         parenthesis_content = ""
-        print(
-            'ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
+        print('ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
         files = []
+        print(self.findDirectory(directoryName))
         try:
             if (py):
                 files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
