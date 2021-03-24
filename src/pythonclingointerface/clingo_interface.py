@@ -24,7 +24,6 @@ class ClingoSolution:
                 self.go = True
         self.text = self.text.decode("utf-8")
 
-
 class ClingoProblem:
     """
     calls executeClingoCode, can take lists of code or a single code file
@@ -58,7 +57,6 @@ class ClingoProblem:
                 self.solution = ClingoSolution(tempf.read())
         else:
             print("ClingoInterface:Run(): there is no file to run")
-
 
 class ClingoInterface:
     """
@@ -98,11 +96,11 @@ class ClingoInterface:
             absolutepath: C:\\Users\\USER\\test\\Project\\helloworld.txt
             returns: C:\\Users\\USER\\test\\
         """
-
         sep = os.sep
         dirs = os.path.abspath("").split("\\")
         newdir = ""
         for d in dirs:
+            # print(d)
             newdir += d + sep
             if d == foldername:
                 return newdir
@@ -117,27 +115,25 @@ class ClingoInterface:
         :param directoryName:
         :return:
         """
-
         parenthesis = False
         parenthesis_start = "<CLINGO"
         parenthesis_end = "CLINGO>"
         parenthesis_content = ""
         print('ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
         files = []
-        print(self.findDirectory(directoryName))
+        potential_files=self.findDirectory(directoryName)
         try:
             if (py):
-                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.py', recursive=True))
+                files.extend(glob.glob(potential_files + '**/*.py', recursive=True))
             if (txt):
-                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.txt', recursive=True))
+                files.extend(glob.glob(potential_files + '**/*.txt', recursive=True))
             if (ipynb):
-                files.extend(glob.glob(self.findDirectory(directoryName) + '**/*.ipynb', recursive=True))
+                files.extend(glob.glob(potential_files + '**/*.ipynb', recursive=True))
 
             print("Found .ipynb Files: " + str(files))
         except:
-            print(
-                "ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
-            raise
+            print("ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
+
 
         for file in files:
             print("Reading File: ", file)
