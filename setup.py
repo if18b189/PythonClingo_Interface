@@ -9,7 +9,7 @@ setup(
     extras_require=dict(tests=['pytest']),
     packages=find_packages(where="src", exclude=['tests', 'tests.*']),
     package_dir={"": "src"},
-    url='https://github.com/BerkWerk/PythonClingo_Interface',
+    url='https://github.com/if18b189/PythonClingo_Interface',
     license='',
     author='Oskar & Berk',
     author_email='',
