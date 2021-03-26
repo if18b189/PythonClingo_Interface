@@ -1,7 +1,9 @@
+import inspect
 import subprocess
 import os
 import tempfile
 import glob
+import ipynbname
 
 
 class ClingoSolution:
@@ -23,6 +25,7 @@ class ClingoSolution:
             if "Answer" in line.decode("utf-8"):
                 self.go = True
         self.text = self.text.decode("utf-8")
+
 
 class ClingoProblem:
     """
@@ -46,7 +49,7 @@ class ClingoProblem:
 
     def executeClingoCode(self):
         """
-            executes clingo code inside a subprocess(in a terminal) and adds the solutions to the ClingoSolutions Class
+        executes clingo code inside a subprocess(in a terminal) and adds the solutions to the ClingoSolutions Class
         """
 
         if self.path is not None:
@@ -57,6 +60,13 @@ class ClingoProblem:
                 self.solution = ClingoSolution(tempf.read())
         else:
             print("ClingoInterface:Run(): there is no file to run")
+
+    def setName(self, name):
+        """
+        Sets a new name for the ClingoProblem
+        """
+        self.name = name
+
 
 class ClingoInterface:
     """
@@ -78,7 +88,7 @@ class ClingoInterface:
 
     def run(self, pathList_or_code):
         """
-            calls executeClingoCode, can take lists of code or a single code file
+        calls executeClingoCode, can take lists of code or a single code file
         """
 
         if type(pathList_or_code) is list:
@@ -89,12 +99,12 @@ class ClingoInterface:
 
     def findDirectory(self, foldername):
         """
-            scans all folders and looks for a match with the given foldername
-            if it finds the folder it returns the path
-            example:
-            findDirectory(test)
-            absolutepath: C:\\Users\\USER\\test\\Project\\helloworld.txt
-            returns: C:\\Users\\USER\\test\\
+        scans all folders and looks for a match with the given foldername
+        if it finds the folder it returns the path
+        example:
+        findDirectory(test)
+        absolutepath: C:\\Users\\USER\\test\\Project\\helloworld.txt
+        returns: C:\\Users\\USER\\test\\
         """
         sep = os.sep
         dirs = os.path.abspath("").split("\\")
@@ -105,35 +115,55 @@ class ClingoInterface:
             if d == foldername:
                 return newdir
 
-    def checkParenthesis(self, directoryName="PythonClingo_Interface", py=True, txt=True, ipynb=True):
+    def checkParenthesis(self, directoryName="None", py=True, txt=True, ipynb=True):
         """
 
         scanning all directories recursively for jupyter notebook files
         extracting the (clingo) code between 2 markers/parenthesis (perenthesis_start & parenthesis_end)
 
-
         :param directoryName:
+        :param filePath:
+        :param py:
+        :param txt:
+        :param ipynb:
         :return:
         """
         parenthesis = False
         parenthesis_start = "<CLINGO"
         parenthesis_end = "CLINGO>"
         parenthesis_content = ""
-        print('ClingoInterface: jupyterParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
         files = []
-        potential_files=self.findDirectory(directoryName)
-        try:
-            if (py):
-                files.extend(glob.glob(potential_files + '**/*.py', recursive=True))
-            if (txt):
-                files.extend(glob.glob(potential_files + '**/*.txt', recursive=True))
-            if (ipynb):
-                files.extend(glob.glob(potential_files + '**/*.ipynb', recursive=True))
 
-            print("Found .ipynb Files: " + str(files))
-        except:
-            print("ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
+        # if no foldername is given, clingoParenthesis will try to work with the .ipynb it was called from
+        if directoryName == "None":
+            try:
+                currentNotebookName = ipynbname.name()
+                currentNotebookPath = str(ipynbname.path())
+                print("ClingoInterface: scanning " + currentNotebookName + ".ipynb")
+                files.append(currentNotebookPath)
+                print(files)
 
+            except:
+                print(
+                    "ClingoInterface: checkParenthesis: could not read the current file")
+
+        else:
+            print(
+                'ClingoInterface: checkParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
+
+            potential_files = self.findDirectory(directoryName)
+            try:
+                if py:
+                    files.extend(glob.glob(potential_files + '**/*.py', recursive=True))
+                if txt:
+                    files.extend(glob.glob(potential_files + '**/*.txt', recursive=True))
+                if ipynb:
+                    files.extend(glob.glob(potential_files + '**/*.ipynb', recursive=True))
+
+                print("Found .ipynb Files: " + str(files))
+            except:
+                print(
+                    "ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
 
         for file in files:
             print("Reading File: ", file)
