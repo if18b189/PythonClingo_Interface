@@ -54,7 +54,7 @@ class ClingoProblem:
 
         if self.path is not None:
             with tempfile.TemporaryFile() as tempf:
-                proc = subprocess.Popen('clingo ' + self.path + " 0", shell=True, stdout=tempf)
+                proc = subprocess.Popen('clingo ' + self.path + " 0", shell=True, stdout=tempf) # 0 shows all solutions in clingo
                 proc.wait()
                 tempf.seek(0)
                 self.solution = ClingoSolution(tempf.read())
