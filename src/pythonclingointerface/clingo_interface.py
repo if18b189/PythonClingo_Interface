@@ -6,6 +6,8 @@ import glob
 import ipynbname
 
 
+#TODO: output errors and stats of clingo code when printing solutions, there is no way for debugging bad clingo code from jupyter
+
 class ClingoSolution:
     """
     Solution Format
