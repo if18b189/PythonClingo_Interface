@@ -152,7 +152,7 @@ class ClingoInterface:
                 fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(),
                                                          text=True)
                 with os.fdopen(fd, "w") as tmp:
-                    print(parenthesis_content)
+                    # print(parenthesis_content)
                     clingoCodeContent = parenthesis_content.split("\n", 1)
                     if len(clingoCodeContent) > 1:
                         clingoCodeContent = clingoCodeContent[1]
