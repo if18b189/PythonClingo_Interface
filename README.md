@@ -87,7 +87,7 @@ in Python/JupyterNotebooks.
   
 ### Installation
 
-Tested with Python `3.8.8` other versions may or may not work.
+[comment]: <> (Tested with Python `3.8.8` other versions may or may not work.)
 ```
 git clone https://github.com/if18b189/PythonClingo_Interface.git
 cd PythonClingo_Interface
