@@ -1,4 +1,3 @@
-import inspect
 import subprocess
 import os
 import tempfile
