@@ -38,6 +38,7 @@ class ClingoProblem:
         self.solution: ClingoSolution
         self.name = name
         self.problemCode = clingoString
+        self.setName()
         if (autoexe):
             self.executeClingoCode()
 
@@ -84,11 +85,22 @@ class ClingoProblem:
             print("ClingoInterface:Run(): there is no file to run")
         os.remove(temporaryFilePath)
 
-    def setName(self, name):
+    def setName(self, name=None):
         """
         Sets a new name for the ClingoProblem
         """
-        self.name = name
+        if(name==None):
+            tmpContent=self.problemCode.split("\n")
+            tmpContent=tmpContent[:2]
+            for line in tmpContent:
+                if(line.startswith("%")):
+                    self.name=line.strip("%")
+                    return
+            self.name="Unknown"
+            return
+        else:
+            self.name = name
+            return
 
 
 class ClingoInterface:
@@ -139,7 +151,12 @@ class ClingoInterface:
             newdir += d + sep
             if d == foldername:
                 return newdir
-
+    def nameToIndex(self,name):
+        if(self.problems != None):
+            for i in range(len(self.problems)):
+                if self.problems[i].name.startswith(name):
+                    return i
+        return -1
     def checkParenthesis(self, directoryName="None", py=True, txt=True, ipynb=True, autoexecute=True):
         """
 
