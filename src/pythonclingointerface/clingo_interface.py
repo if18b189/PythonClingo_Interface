@@ -3,7 +3,8 @@ import os
 import tempfile
 import glob
 import ipynbname
-
+import random
+from typing import List
 
 #TODO: output errors and stats of clingo code when printing solutions, there is no way for debugging bad clingo code from jupyter
 
@@ -33,13 +34,12 @@ class ClingoProblem:
     calls executeClingoCode, can take lists of code or a single code file
     """
 
-    def __init__(self, tmpFile=None, autoexecute=True, clingoString=None, name="Problem Name"):
+    def __init__(self, tmpFile=None, autoexe=True, clingoString="<CLINGO\n\n\n\nCLINGO>", name="Problem Name"):
         self.solution: ClingoSolution
         self.name = name
         self.path = tmpFile
         self.problemCode = clingoString
-
-        if (autoexecute):
+        if (autoexe):
             self.executeClingoCode()
             if (clingoString and tmpFile == None):
                 fd, tmpFile = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
@@ -47,6 +47,25 @@ class ClingoProblem:
                     tmp.write(clingoString)
                 self.executeClingoCode()
                 os.remove(tmpFile)
+
+    def addRelation(self, clauseName, clauseObject, clauseSubject):
+        temp = self.problemCode.split("\n")
+        insert = clauseName + "(" + clauseObject + "," + clauseSubject + ")."
+        temp = [temp[0], temp[1], insert] + temp[2:]
+        self.problemCode = "\n".join(temp)
+
+    def addRelation(self, clauseName, clauseObject):
+        temp = self.problemCode.split("\n")
+        insert = clauseName + "(" + clauseObject + ")."
+        temp = [temp[0], temp[1], insert] + temp[2:]
+        self.problemCode = "\n".join(temp)
+
+    def addClause(self, clauseText):
+        temp = self.problemCode.split("\n")
+        temp = [temp[0], temp[1], clauseText] + temp[2:]
+        self.problemCode = "\n".join(temp)
+
+
 
     def executeClingoCode(self):
         """
@@ -75,7 +94,9 @@ class ClingoInterface:
     """
 
     def __init__(self):
-        self.problems = []
+        self.problems:List[ClingoProblem]= []
+
+        print("TestID: \n"+str(random.randint(0,500)))
 
     def printSolutions(self):
         """
@@ -116,7 +137,7 @@ class ClingoInterface:
             if d == foldername:
                 return newdir
 
-    def checkParenthesis(self, directoryName="None", py=True, txt=True, ipynb=True):
+    def checkParenthesis(self, directoryName="None", py=True, txt=True, ipynb=True, autoexecute=True):
         """
 
         scanning all directories recursively for jupyter notebook files
@@ -190,5 +211,5 @@ class ClingoInterface:
                     else:
                         return
                     tmp.write(clingoCodeContent)
-                self.problems.append(ClingoProblem(temporaryFilePath))
+                self.problems.append(ClingoProblem(temporaryFilePath,clingoString=clingoCodeContent,autoexe=autoexecute))
                 os.remove(temporaryFilePath)
