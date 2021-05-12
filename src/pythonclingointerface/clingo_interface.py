@@ -34,19 +34,12 @@ class ClingoProblem:
     calls executeClingoCode, can take lists of code or a single code file
     """
 
-    def __init__(self, tmpFile=None, autoexe=True, clingoString="<CLINGO\n\n\n\nCLINGO>", name="Problem Name"):
+    def __init__(self, autoexe=True, clingoString="<CLINGO\n\n\n\nCLINGO>", name="Problem Name"):
         self.solution: ClingoSolution
         self.name = name
-        self.path = tmpFile
         self.problemCode = clingoString
         if (autoexe):
             self.executeClingoCode()
-            if (clingoString and tmpFile == None):
-                fd, tmpFile = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(), text=True)
-                with os.fdopen(fd, "w") as tmp:
-                    tmp.write(clingoString)
-                self.executeClingoCode()
-                os.remove(tmpFile)
 
     def addRelation(self, clauseName, clauseObject, clauseSubject):
         temp = self.problemCode.split("\n")
@@ -65,22 +58,31 @@ class ClingoProblem:
         temp = [temp[0], temp[1], clauseText] + temp[2:]
         self.problemCode = "\n".join(temp)
 
-
-
     def executeClingoCode(self):
         """
         executes clingo code inside a subprocess(in a terminal) and adds the solutions to the ClingoSolutions Class
         """
+        fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(),
+                                                 text=True)
+        with os.fdopen(fd, "w") as tmp:
+            clingoCodeContent = self.problemCode.split("\n", 1)
 
-        if self.path is not None:
+            if len(clingoCodeContent) > 1:
+                clingoCodeContent = clingoCodeContent[1]
+            else:
+                return
+            tmp.write(clingoCodeContent)
+
+        if temporaryFilePath is not None:
             with tempfile.TemporaryFile() as tempf:
-                proc = subprocess.Popen('clingo ' + self.path + " 0", shell=True, stdout=tempf) # 0 shows all solutions in clingo
+                proc = subprocess.Popen('clingo ' + temporaryFilePath + " 0", shell=True, stdout=tempf) # 0 shows all solutions in clingo
                 proc.wait()
                 tempf.seek(0)
                 self.solution = ClingoSolution(tempf.read())
 
         else:
             print("ClingoInterface:Run(): there is no file to run")
+        os.remove(temporaryFilePath)
 
     def setName(self, name):
         """
@@ -202,15 +204,4 @@ class ClingoInterface:
                         parenthesis_content += line[5:-2].replace("\\n", "\n").replace('\\"', '"')
                     if parenthesis_start in line:  # checks for start parenthesis
                         parenthesis = True
-                fd, temporaryFilePath = tempfile.mkstemp(suffix='.txt', prefix='clingoInterfaceTemp_', dir=os.getcwd(),
-                                                         text=True)
-                with os.fdopen(fd, "w") as tmp:
-                    # print(parenthesis_content)
-                    clingoCodeContent = parenthesis_content.split("\n", 1)
-                    if len(clingoCodeContent) > 1:
-                        clingoCodeContent = clingoCodeContent[1]
-                    else:
-                        return
-                    tmp.write(clingoCodeContent)
-                self.problems.append(ClingoProblem(temporaryFilePath,clingoString=clingoCodeContent,autoexe=autoexecute))
-                os.remove(temporaryFilePath)
+                self.problems.append(ClingoProblem(clingoString=parenthesis_content,autoexe=autoexecute))
