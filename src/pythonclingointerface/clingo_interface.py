@@ -54,7 +54,7 @@ class ClingoProblem:
         temp = [temp[0], temp[1], insert] + temp[2:]
         self.problemCode = "\n".join(temp)
 
-    def addRelation(self, clauseName, clauseObject):
+    def addFact(self, clauseName, clauseObject):
         temp = self.problemCode.split("\n")
         insert = clauseName + "(" + clauseObject + ")."
         temp = [temp[0], temp[1], insert] + temp[2:]
@@ -78,6 +78,7 @@ class ClingoProblem:
                 proc.wait()
                 tempf.seek(0)
                 self.solution = ClingoSolution(tempf.read())
+
         else:
             print("ClingoInterface:Run(): there is no file to run")
 
