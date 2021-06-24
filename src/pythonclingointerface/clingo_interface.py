@@ -134,6 +134,17 @@ class ClingoInterface:
         else:
             self.executeClingoCode(pathList_or_code)
 
+    def getSolutions(self):
+        """
+        returns solutions as a dictionary
+        """
+        solutionDict = dict()
+        for i in self.problems:
+
+            solutionDict[i.name] = i.solution.solutions
+
+        return solutionDict
+
     def findDirectory(self, foldername):
         """
         scans all folders and looks for a match with the given foldername
