@@ -108,10 +108,11 @@ class ClingoInterface:
     calls executeClingoCode, can take lists of code or a single code file
     """
 
-    def __init__(self):
+    def __init__(self, debug=False):
+        self.debug=debug
         self.problems:List[ClingoProblem]= []
-
-        print("TestID: \n"+str(random.randint(0,500)))
+        if self.debug:
+            print("TestID: \n"+str(random.randint(0,500)))
 
     def printSolutions(self):
         """
@@ -168,7 +169,7 @@ class ClingoInterface:
                 if self.problems[i].name.startswith(name):
                     return i
         return -1
-    def checkParenthesis(self, directoryName="None", py=True, txt=True, ipynb=True, autoexecute=True):
+    def checkParenthesis(self, directoryName="None", debug=False, py=True, txt=True, ipynb=True, autoexecute=True, concatenate=0):
         """
 
         scanning all directories recursively for jupyter notebook files
@@ -192,17 +193,21 @@ class ClingoInterface:
             try:
                 currentNotebookName = ipynbname.name()
                 currentNotebookPath = str(ipynbname.path())
-                print("ClingoInterface: scanning " + currentNotebookName + ".ipynb")
+                if debug:
+                    print("ClingoInterface: scanning " + currentNotebookName + ".ipynb")
                 files.append(currentNotebookPath)
-                print(files)
+                if debug:
+                    print(files)
 
             except:
-                print(
-                    "ClingoInterface: checkParenthesis: could not read the current file")
+                if debug:
+                    print(
+                        "ClingoInterface: checkParenthesis: could not read the current file")
 
         else:
-            print(
-                'ClingoInterface: checkParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
+            if debug:
+                print(
+                    'ClingoInterface: checkParenthesis: scanning all subfolders of "' + directoryName + '"(folder) recursively for .ipynb')
 
             potential_files = self.findDirectory(directoryName)
             try:
@@ -212,24 +217,33 @@ class ClingoInterface:
                     files.extend(glob.glob(potential_files + '**/*.txt', recursive=True))
                 if ipynb:
                     files.extend(glob.glob(potential_files + '**/*.ipynb', recursive=True))
-
-                print("Found .ipynb Files: " + str(files))
+                if debug:
+                    print("Found .ipynb Files: " + str(files))
             except:
-                print(
+                if debug:
+                    print(
                     "ClingoInterface:jnotebookParenthesis: could not find any .ipynb in the given directory, try to set directory manually")
 
         for file in files:
-            print("Reading File: ", file)
+            if debug:
+                print("Reading File: ", file)
             fs = open(file, 'r')
             if parenthesis_start in fs.read():
-                print("Found Clingo Parenthesis in File: ", file)
+                if debug:
+                    print("Found Clingo Parenthesis in File: ", file)
                 fs = open(file, 'r')
                 con = fs.read().splitlines()  # splitlines '\n' -> list
                 for line in con:
                     if parenthesis_end in line:  # checks for the end parenthesis
                         parenthesis = False
+                        if(concatenate==0 or concatenate==2):
+                            self.problems.append(ClingoProblem(clingoString=parenthesis_content, autoexe=autoexecute))
+                            if(concatenate==0):
+                                parenthesis_content=""
                     if parenthesis:  # adds clingo code to to parenthesis_content
-                        parenthesis_content += line[5:-2].replace("\\n", "\n").replace('\\"', '"')
+                        parenthesis_content += line[5:-2].replace("\\n", "\n").replace('\\"', '"').replace("\\\\","\\")
                     if parenthesis_start in line:  # checks for start parenthesis
                         parenthesis = True
-                self.problems.append(ClingoProblem(clingoString=parenthesis_content,autoexe=autoexecute))
+                if concatenate==1:
+                    self.problems.append(ClingoProblem(clingoString=parenthesis_content,autoexe=autoexecute))
+
